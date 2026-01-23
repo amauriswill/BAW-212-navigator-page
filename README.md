@@ -21,7 +21,7 @@ El proyecto simula una interfaz táctica/militar con las siguientes secciones:
 
 ## 🚀 Cómo Visualizar
 1.  Clona el repositorio.
-2.  Abre el archivo `Branded Info Page/Index.html` en tu navegador web.
+2.  Abre el archivo `index.html` en tu navegador web.
 
 ---
 *Grupo AVANT - Campaña 212*
