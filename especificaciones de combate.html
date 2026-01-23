@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="es-DO">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>T01 NAVIGATOR | PROTOCOLO OPERATIVO</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Chakra+Petch:wght@400;700&display=swap"
+      rel="stylesheet" />
+
+    <style>
+      /* --- PALETA DE COLORES (BASADA EN TU IMAGEN) --- */
+      :root {
+        --bg-dark: #050708; /* Negro Profundo */
+        --bg-panel: #0f1113; /* Panel Gris Oscuro */
+        --cyan-active: #00e5ff; /* Cian Brillante (Activo) */
+        --orange-text: #c48046; /* Naranja Quemado (Texto Menú) */
+        --text-dim: #5c6773; /* Texto Apagado */
+        --text-body: #aebbc9; /* Texto Lectura */
+        --border-line: #1f2329; /* Líneas sutiles */
+
+        --font-ui: "JetBrains Mono", monospace; /* Datos */
+        --font-head: "Chakra Petch", sans-serif; /* Títulos */
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: var(--bg-dark);
+        color: var(--text-body);
+        font-family: var(--font-ui);
+        font-size: 14px;
+        display: flex;
+        justify-content: center;
+        padding: 40px;
+        min-height: 100vh;
+        background-image: radial-gradient(#1a1d21 1px, transparent 1px);
+        background-size: 20px 20px;
+      }
+
+      /* --- CONTENEDOR PRINCIPAL (INTERFAZ) --- */
+      .interface {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        width: 100%;
+        max-width: 1200px;
+        background-color: var(--bg-dark);
+        border: 1px solid var(--border-line);
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+      }
+
+      /* --- SIDEBAR (REPLICANDO TU IMAGEN) --- */
+      aside {
+        background-color: #080a0c;
+        border-right: 1px solid var(--border-line);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 40px 0;
+      }
+
+      .nav-menu {
+        list-style: none;
+      }
+
+      .nav-item {
+        padding: 15px 30px;
+        font-family: var(--font-ui);
+        text-transform: uppercase;
+        font-size: 13px;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: 0.3s;
+        color: var(--orange-text); /* Color naranja de la imagen */
+        border-left: 3px solid transparent;
+        margin-bottom: 5px;
+      }
+
+      .nav-item:hover {
+        background-color: rgba(255, 255, 255, 0.02);
+      }
+
+      /* ESTADO ACTIVO (COMO EN LA IMAGEN) */
+      .nav-item.active {
+        color: var(--cyan-active);
+        border-left: 3px solid var(--cyan-active);
+        background-color: rgba(0, 229, 255, 0.05);
+        font-weight: 700;
+        text-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+      }
+
+      /* STATUS BOX DEL FOOTER (TU IMAGEN) */
+      .system-status {
+        margin: 0 20px;
+        padding: 20px;
+        border: 1px solid var(--border-line);
+        color: var(--orange-text);
+        font-size: 11px;
+        line-height: 1.8;
+        opacity: 0.7;
+      }
+
+      .blink {
+        animation: blinker 1.5s linear infinite;
+      }
+      @keyframes blinker {
+        50% {
+          opacity: 0;
+        }
+      }
+
+      /* --- ÁREA DE CONTENIDO --- */
+      main {
+        padding: 50px;
+        overflow-y: auto;
+        height: 90vh; /* Scroll interno */
+      }
+
+      h2 {
+        font-family: var(--font-head);
+        font-size: 2.5rem;
+        color: white;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+        letter-spacing: 2px;
+      }
+
+      .section-divider {
+        height: 2px;
+        background: linear-gradient(90deg, var(--cyan-active), transparent);
+        margin-bottom: 40px;
+        width: 100px;
+      }
+
+      h3 {
+        color: var(--cyan-active);
+        font-size: 1.2rem;
+        margin-top: 40px;
+        margin-bottom: 15px;
+        border-left: 2px solid var(--orange-text);
+        padding-left: 10px;
+        text-transform: uppercase;
+      }
+
+      p {
+        margin-bottom: 20px;
+        max-width: 700px;
+      }
+
+      /* --- ESTILOS PARA SECCIÓN 02 (COMBAT SPECS) --- */
+      .spec-card {
+        background: var(--bg-panel);
+        border: 1px solid var(--border-line);
+        padding: 25px;
+        margin-bottom: 20px;
+        display: grid;
+        grid-template-columns: 100px 1fr;
+        gap: 20px;
+        align-items: center;
+      }
+
+      .spec-icon {
+        font-size: 2rem;
+        color: var(--orange-text);
+        text-align: center;
+        border-right: 1px solid var(--border-line);
+        padding-right: 20px;
+      }
+
+      .spec-data strong {
+        color: white;
+        font-size: 1.1rem;
+        display: block;
+      }
+      .spec-data small {
+        color: var(--text-dim);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .spec-rationale {
+        margin-top: 10px;
+        font-size: 0.9rem;
+        color: var(--cyan-active);
+        border-top: 1px dashed var(--border-line);
+        padding-top: 10px;
+      }
+
+      /* --- ESTILOS PARA SECCIÓN 03 (PROTOCOLO VENTA) --- */
+      .terminal-window {
+        background-color: #000;
+        padding: 20px;
+        border: 1px solid var(--text-dim);
+        font-family: "Courier New", Courier, monospace;
+        color: #33ff00;
+      }
+
+      .user-input {
+        color: white;
+      }
+      .system-response {
+        color: var(--orange-text);
+        margin-bottom: 15px;
+        display: block;
+      }
+
+      /* --- ESTILOS PARA SECCIÓN 04 (OPS PLAN) --- */
+      .ops-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+      }
+
+      .tactic-box {
+        border: 1px solid var(--border-line);
+        padding: 20px;
+        transition: 0.3s;
+      }
+
+      .tactic-box:hover {
+        border-color: var(--cyan-active);
+        background: rgba(0, 229, 255, 0.02);
+      }
+
+      .tag {
+        background: var(--orange-text);
+        color: black;
+        padding: 2px 6px;
+        font-size: 10px;
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+
+      /* --- RESPONSIVE --- */
+      @media (max-width: 800px) {
+        .interface {
+          grid-template-columns: 1fr;
+        }
+        aside {
+          display: none;
+        } /* Ocultar sidebar en móvil */
+        main {
+          height: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="interface">
+      <aside>
+        <ul class="nav-menu">
+          <li class="nav-item">01. INFORME DE SITUACIÓN</li>
+          <li class="nav-item active">02. ESPECIFICACIONES DE COMBATE</li>
+          <li class="nav-item">03. PROTOCOLO DE VENTA</li>
+          <li class="nav-item">04. PLAN DE OPERACIONES</li>
+        </ul>
+
+        <div class="system-status">
+          > SISTEMA CONNECTADO<br />
+          > DATA METEOROLÓGICA: CARGADA<br />
+          > MAPA VIAL: CARGADO<br />
+          > TARGET: SANTO DOMINGO<span class="blink">_</span>
+        </div>
+      </aside>
+
+      <main>
+        <section id="section-02">
+          <h2>02. ESPECIFICACIONES DE COMBATE</h2>
+          <div class="section-divider"></div>
+          <p>
+            Análisis de componentes críticos del Navigator T01 frente a las
+            amenazas de la infraestructura dominicana.
+          </p>
+
+          <div class="spec-card">
+            <div class="spec-icon">///</div>
+            <div class="spec-data">
+              <small>COMPONENTE: ADMISIÓN DE AIRE</small>
+              <strong>SNORKEL ELEVADO (750MM)</strong>
+              <div class="spec-rationale">
+                > FUNCIÓN TÁCTICA: Permite la operatividad del motor durante
+                inundaciones urbanas severas (Churchill/Luperón).
+              </div>
+            </div>
+          </div>
+
+          <div class="spec-card">
+            <div class="spec-icon">AXL</div>
+            <div class="spec-data">
+              <small>COMPONENTE: TREN DE RODAJE</small>
+              <strong>SUSPENSIÓN NITROG + 1.5" LIFT</strong>
+              <div class="spec-rationale">
+                > FUNCIÓN TÁCTICA: Absorción de impactos de alta velocidad en
+                carreteras deterioradas. Prevención de daño en bajos.
+              </div>
+            </div>
+          </div>
+
+          <div class="spec-card">
+            <div class="spec-icon">TRC</div>
+            <div class="spec-data">
+              <small>COMPONENTE: CONTACTO</small>
+              <strong>NEUMÁTICOS 285/70 R17 (AT)</strong>
+              <div class="spec-rationale">
+                > FUNCIÓN TÁCTICA: Agarre mixto. Elimina la necesidad de cambio
+                inmediato de gomas post-compra.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="section-03" style="margin-top: 80px">
+          <h2>03. PROTOCOLO DE VENTA</h2>
+          <div class="section-divider"></div>
+          <p>
+            Guión de calificación no invasivo. Estilo "Terminal de Comando".
+          </p>
+
+          <div class="terminal-window">
+            <span class="system-response"
+              >INICIANDO SECUENCIA DE INTERROGATORIO...</span
+            >
+            <br />
+            <span class="system-response"
+              >[AGENTE]: "¿Alguna vez ha sentido ansiedad al ver una calle
+              inundada en el centro de la ciudad?"</span
+            >
+            <span class="user-input"
+              >> [CLIENTE]: Sí, en noviembre pasado perdí una ruta
+              completa.</span
+            >
+            <br /><br />
+            <span class="system-response"
+              >[AGENTE]: "Cargando datos... El T01 Navigator posee una línea de
+              inmersión superior al promedio del segmento de lujo."</span
+            >
+            <span class="user-input">> [CLIENTE]: ¿Es seguro?</span>
+            <br /><br />
+            <span class="system-response"
+              >[AGENTE]: "Afirmativo. El sistema está sellado. Este vehículo no
+              se detiene por el clima. ¿Está listo para validar esto en una
+              prueba de campo?"</span
+            >
+          </div>
+        </section>
+
+        <section id="section-04" style="margin-top: 80px">
+          <h2>04. PLAN DE OPERACIONES</h2>
+          <div class="section-divider"></div>
+
+          <div class="ops-grid">
+            <div class="tactic-box">
+              <span class="tag">GUERRILLA</span>
+              <h3>LA AUDITORÍA DEL ASFALTO</h3>
+              <p>
+                Identificación y marcaje físico de los baches más peligrosos de
+                la ciudad con stencil: <strong>"NIVEL T01 REQUERIDO"</strong>.
+              </p>
+            </div>
+
+            <div class="tactic-box">
+              <span class="tag">DIGITAL</span>
+              <h3>SERIE "LA AUTOPSIA"</h3>
+              <p>
+                Videos técnicos comparando piezas de suspensión de SUVs de lujo
+                rotas vs. los componentes reforzados del Navigator.
+              </p>
+            </div>
+
+            <div class="tactic-box">
+              <span class="tag">DATA / API</span>
+              <h3>TRIGGER METEOROLÓGICO</h3>
+              <p>
+                Activación automática de anuncios en Waze/Instagram cuando la
+                probabilidad de lluvia supera el 80%.
+              </p>
+              <small style="color: var(--cyan-active)"
+                >> COPY: "SUBE LOS VIDRIOS. ACTIVA 4H."</small
+              >
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
