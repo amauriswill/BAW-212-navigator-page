@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>212 Navigator | Tablero de Campaña Estratégica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #0f172a;
+            /* Slate 900 */
+            --secondary-bg: #1e293b;
+            /* Slate 800 */
+            --accent-silver: #cbd5e1;
+            /* Slate 300 */
+            --accent-spy: #10b981;
+            /* Emerald 500 */
+            --text-main: #f1f5f9;
+            /* Slate 100 */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        .serif-font {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            height: 400px;
+        }
+
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Duality Toggle Switch */
+        .switch-container {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .duality-btn {
+            transition: all 0.5s ease;
+        }
+
+        .mode-executive {
+            border-left: 4px solid var(--accent-silver);
+        }
+
+        .mode-renegade {
+            border-left: 4px solid var(--accent-spy);
+        }
+
+        .tab-active {
+            border-bottom: 2px solid var(--accent-silver);
+            color: white;
+        }
+
+        .tab-inactive {
+            color: #64748b;
+            /* Slate 500 */
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+
+<body class="antialiased selection:bg-slate-400 selection:text-black">
+
+    <!-- Navigation / Header -->
+    <nav class="fixed top-0 w-full z-50 glass-panel border-b border-slate-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold tracking-widest text-white serif-font">212 <span
+                            class="text-slate-300">NAVIGATOR</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#archetype"
+                            class="hover:text-slate-300 px-3 py-2 rounded-md text-sm font-medium transition-colors">El
+                            Arquetipo</a>
+                        <a href="#duality"
+                            class="hover:text-slate-300 px-3 py-2 rounded-md text-sm font-medium transition-colors">La
+                            Dualidad</a>
+                        <a href="#strategy"
+                            class="hover:text-slate-300 px-3 py-2 rounded-md text-sm font-medium transition-colors">Estrategia</a>
+                        <a href="#execution"
+                            class="hover:text-slate-300 px-3 py-2 rounded-md text-sm font-medium transition-colors">Copy
+                            y Tono</a>
+                    </div>
+                </div>
+                <!-- Duality Toggle -->
+                <div class="flex items-center space-x-3">
+                    <span id="mode-label" class="text-xs uppercase tracking-widest text-slate-400">Modo
+                        Sofisticado</span>
+                    <button id="duality-toggle"
+                        class="relative inline-flex h-6 w-11 items-center rounded-full bg-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-900">
+                        <span class="sr-only">Alternar Dualidad</span>
+                        <span id="toggle-circle"
+                            class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-1"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative pt-32 pb-12 lg:pt-48 lg:pb-24 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight">
+                <span id="hero-title-1" class="block">Domina con Elegancia.</span>
+                <span id="hero-title-2" class="block text-slate-500">Opera en las Sombras.</span>
+            </h1>
+            <p class="mt-4 max-w-2xl mx-auto text-xl text-slate-400 font-light">
+                Un marco estratégico forjado en la intersección del lujo y el espionaje táctico.
+                Definiendo al conductor del "212 Navigator".
+            </p>
+            <div class="mt-10 flex justify-center gap-4">
+                <a href="#archetype"
+                    class="px-8 py-3 border border-slate-400 text-slate-300 hover:bg-slate-700 hover:text-white transition-all uppercase tracking-widest text-sm font-bold">
+                    Explorar Arquetipo
+                </a>
+            </div>
+        </div>
+        <!-- Decorative background elements -->
+        <div
+            class="absolute top-0 left-1/2 transform -translate-x-1/2 w-full h-full z-0 opacity-20 pointer-events-none">
+            <div class="absolute top-20 left-10 w-64 h-64 bg-slate-700 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-10 right-10 w-96 h-96 bg-emerald-900 rounded-full blur-3xl"></div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24 pb-24">
+
+        <!-- SECTION 1: THE ARCHETYPE (DNA Analysis) -->
+        <section id="archetype" class="scroll-mt-24">
+            <div class="mb-10 border-l-4 border-slate-400 pl-4">
+                <h2 class="text-3xl font-bold text-white uppercase tracking-wider">El Arquetipo Objetivo</h2>
+                <p class="text-slate-400 mt-2">La "Vanguardia Soberana": Fría precisión y capacidad letal.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <!-- Text / Description -->
+                <div class="space-y-6">
+                    <p class="text-lg text-slate-300 leading-relaxed">
+                        Para vender el 212 Navigator, evocamos el mundo del agente definitivo.
+                        Analizamos seis personajes clave para crear la <strong>Vanguardia Soberana</strong>.
+                        Posee la clase de Bond en el casino y la letalidad de un operativo en campo.
+                    </p>
+
+                    <div class="glass-panel p-6 rounded-lg">
+                        <h3 class="text-xl font-bold text-white mb-4 serif-font">Motor de Síntesis de Personajes</h3>
+                        <div class="space-y-4" id="trait-list">
+                            <!-- JS will populate interactive trait bars here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Radar Chart -->
+                <div class="bg-slate-900 p-4 rounded-xl shadow-2xl border border-slate-700">
+                    <div class="chart-container">
+                        <canvas id="archetypeChart"></canvas>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <p class="text-xs text-slate-500">Interactivo: Haga clic en la leyenda para alternar la
+                            influencia.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: THE DUALITY (Concept Engine) -->
+        <section id="duality" class="scroll-mt-24">
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-bold text-white uppercase tracking-wider serif-font">La Estrategia de Dualidad
+                </h2>
+                <p class="text-slate-400 mt-2 max-w-2xl mx-auto">
+                    El 212 Navigator vive en dos mundos.
+                    <br>Nuestra campaña explota la tensión entre la <span class="text-slate-300">Etiqueta
+                        Sofisticada</span>
+                    y la <span class="text-emerald-500">Astucia del Espía</span>.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Side A: The Sophisticated (Bond) -->
+                <div id="card-executive"
+                    class="glass-panel p-8 rounded-xl border-t-4 border-slate-400 transition-all duration-500 hover:bg-slate-800">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-2xl font-bold text-white">El Casino Royale</h3>
+                        <span class="text-xs font-mono bg-slate-700 text-slate-200 px-2 py-1 rounded">SOFISTICADO</span>
+                    </div>
+                    <div class="space-y-4 text-slate-300">
+                        <p><strong class="text-white">Inspiración:</strong> James Bond (Casino), Bruce Wayne (Gala).</p>
+                        <p><strong class="text-white">Palabras Clave:</strong> Clase, Sutileza, Traje a Medida,
+                            Marttini.</p>
+                        <p><strong class="text-white">Visuales:</strong> Plata metálica, negro profundo, cristal
+                            tallado, miradas discretas.</p>
+                        <div class="mt-6 p-4 bg-black bg-opacity-30 rounded border-l-2 border-slate-500 italic">
+                            "El arma más peligrosa es la que no se ve. El 212 Navigator domina la sala sin decir una
+                            palabra."
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Side B: The Spy (Action) -->
+                <div id="card-renegade"
+                    class="glass-panel p-8 rounded-xl border-t-4 border-emerald-500 transition-all duration-500 hover:bg-slate-800 opacity-60">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-2xl font-bold text-white">Misión Táctica</h3>
+                        <span class="text-xs font-mono bg-emerald-900 text-emerald-200 px-2 py-1 rounded">INTRÉPIDO
+                            ESPÍA</span>
+                    </div>
+                    <div class="space-y-4 text-slate-300">
+                        <p><strong class="text-white">Inspiración:</strong> Ethan Hunt, Jason Bourne, 007 (Campo).</p>
+                        <p><strong class="text-white">Palabras Clave:</strong> Infiltración, Tecnología, Velocidad,
+                            Riesgo.</p>
+                        <p><strong class="text-white">Visuales:</strong> Visión nocturna, mapas digitales, neón verde,
+                            persecución.</p>
+                        <div class="mt-6 p-4 bg-black bg-opacity-30 rounded border-l-2 border-emerald-700 italic">
+                            "Cuando el plan falla, improvisas. Cuando el camino termina, lo creas."
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 text-center">
+                <p class="text-sm text-slate-500">Prueba el interruptor para cambiar entre la Gala y la Misión.</p>
+            </div>
+        </section>
+
+        <!-- SECTION 3: STRATEGIC PILLARS -->
+        <section id="strategy" class="scroll-mt-24">
+            <div class="mb-10 border-l-4 border-slate-600 pl-4">
+                <h2 class="text-3xl font-bold text-white uppercase tracking-wider">Pilares Estratégicos</h2>
+                <p class="text-slate-400 mt-2">Tres vectores de ataque para la campaña.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Pillar 1 -->
+                <div
+                    class="bg-slate-900 p-6 rounded-lg border border-slate-700 hover:border-slate-400 transition-colors group">
+                    <div
+                        class="h-12 w-12 bg-slate-800 rounded-full flex items-center justify-center mb-4 group-hover:bg-slate-500 transition-colors">
+                        <span class="text-xl font-bold text-white">1</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Gadgetería Letal</h3>
+                    <p class="text-sm text-slate-400 mb-4">Influencias: Q Branch / Stark</p>
+                    <p class="text-slate-300">El vehículo como extensión del arsenal. Escudos, sensores, conectividad
+                        encriptada. Tecnología que salva vidas y toma ventajas.</p>
+                </div>
+
+                <!-- Pillar 2 -->
+                <div
+                    class="bg-slate-900 p-6 rounded-lg border border-slate-700 hover:border-emerald-500 transition-colors group">
+                    <div
+                        class="h-12 w-12 bg-slate-800 rounded-full flex items-center justify-center mb-4 group-hover:bg-emerald-600 transition-colors">
+                        <span class="text-xl font-bold text-white">2</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Sigilo y Estilo</h3>
+                    <p class="text-sm text-slate-400 mb-4">Influencias: Bond / Draper</p>
+                    <p class="text-slate-300">Diseño que camufla la potencia. Un exterior pulido que esconde un motor
+                        capaz de escapar de cualquier situación.</p>
+                </div>
+
+                <!-- Pillar 3 -->
+                <div
+                    class="bg-slate-900 p-6 rounded-lg border border-slate-700 hover:border-blue-600 transition-colors group">
+                    <div
+                        class="h-12 w-12 bg-slate-800 rounded-full flex items-center justify-center mb-4 group-hover:bg-blue-600 transition-colors">
+                        <span class="text-xl font-bold text-white">3</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Maniobra Evasiva</h3>
+                    <p class="text-sm text-slate-400 mb-4">Influencias: Bourne / Statham</p>
+                    <p class="text-slate-300">Rendimiento bajo presión. Suspensión adaptativa, par instantáneo. Hecho
+                        para la persecución.</p>
+                </div>
+            </div>
+
+            <!-- Market Data Charts -->
+            <div class="mt-16 grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="glass-panel p-6 rounded-xl">
+                    <h3 class="text-lg font-bold text-white mb-4">Impulsores Psicográficos</h3>
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="driversChart"></canvas>
+                    </div>
+                </div>
+                <div class="glass-panel p-6 rounded-xl">
+                    <h3 class="text-lg font-bold text-white mb-4">Asignación de Canales</h3>
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="channelChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: EXECUTION & COPYWRITING -->
+        <section id="execution" class="scroll-mt-24">
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-bold text-white uppercase tracking-wider serif-font">Informe de Misión (Copy)
+                </h2>
+            </div>
+
+            <div class="bg-slate-900 rounded-xl overflow-hidden border border-slate-700">
+                <div class="grid grid-cols-1 md:grid-cols-4 border-b border-slate-700">
+                    <button
+                        class="tab-btn px-6 py-4 text-sm font-bold uppercase tracking-wider hover:bg-slate-800 text-left md:text-center tab-active"
+                        onclick="switchTab('social')">Inteligencia (Social)</button>
+                    <button
+                        class="tab-btn px-6 py-4 text-sm font-bold uppercase tracking-wider hover:bg-slate-800 text-left md:text-center tab-inactive"
+                        onclick="switchTab('print')">Dossier (Print)</button>
+                    <button
+                        class="tab-btn px-6 py-4 text-sm font-bold uppercase tracking-wider hover:bg-slate-800 text-left md:text-center tab-inactive"
+                        onclick="switchTab('email')">Comunicado (Email)</button>
+                    <button
+                        class="tab-btn px-6 py-4 text-sm font-bold uppercase tracking-wider hover:bg-slate-800 text-left md:text-center tab-inactive"
+                        onclick="switchTab('video')">Vigilancia (Video)</button>
+                </div>
+
+                <div class="p-8 min-h-[300px]" id="copy-content">
+                    <!-- Dynamic Content Loaded via JS -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="border-t border-slate-800 py-12 bg-black">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-slate-500 text-sm">TOP SECRET // ESTRATEGIA 212 NAVIGATOR &copy; 2024.</p>
+            <p class="text-slate-600 text-xs mt-2">Ojos solamente.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- DATA & CONFIGURATION ---
+
+        // Palette Colors for JS
+        const colors = {
+            silver: 'rgba(203, 213, 225, 0.6)', // Slate 300
+            silverBorder: 'rgba(203, 213, 225, 1)',
+            spyGreen: 'rgba(16, 185, 129, 0.6)', // Emerald 500
+            spyBorder: 'rgba(16, 185, 129, 1)',
+            blue: 'rgba(59, 130, 246, 0.6)',
+            dark: '#0f172a',
+            text: '#f1f5f9'
+        };
+
+        // --- CHART GENERATION ---
+
+        // 1. Archetype Radar Chart
+        const ctxRadar = document.getElementById('archetypeChart').getContext('2d');
+        const archetypeChart = new Chart(ctxRadar, {
+            type: 'radar',
+            data: {
+                labels: ['Tecnología/Gadgets', 'Combate Cuerpo a Cuerpo', 'Sofisticación', 'Recursos', 'Puntería/Precisión', 'Sigilo'],
+                datasets: [{
+                    label: 'Agente 212 (Objetivo)',
+                    data: [90, 85, 95, 90, 80, 85],
+                    backgroundColor: 'rgba(203, 213, 225, 0.2)',
+                    borderColor: colors.silverBorder,
+                    pointBackgroundColor: colors.silverBorder,
+                    borderWidth: 2
+                },
+                {
+                    label: 'Operativo Estándar',
+                    data: [60, 50, 40, 30, 60, 50],
+                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                    borderColor: '#475569',
+                    pointBackgroundColor: '#475569',
+                    borderWidth: 1,
+                    hidden: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        angleLines: { color: 'rgba(255,255,255,0.1)' },
+                        grid: { color: 'rgba(255,255,255,0.1)' },
+                        pointLabels: {
+                            color: '#94a3b8',
+                            font: { size: 12, family: 'Inter' }
+                        },
+                        ticks: { display: false, backdropColor: 'transparent' }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: { color: '#e2e8f0', font: { family: 'Inter' } }
+                    }
+                }
+            }
+        });
+
+        // 2. Psychographic Drivers (Donut)
+        const ctxDrivers = document.getElementById('driversChart').getContext('2d');
+        new Chart(ctxDrivers, {
+            type: 'doughnut',
+            data: {
+                labels: ['Estatus de Élite', 'Adrenalina', 'Seguridad/Privacidad', 'Estética'],
+                datasets: [{
+                    data: [35, 30, 15, 20],
+                    backgroundColor: ['#cbd5e1', '#10b981', '#3b82f6', '#475569'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'right', labels: { color: '#aaa' } }
+                }
+            }
+        });
+
+        // 3. Channel Allocation (Bar)
+        const ctxChannel = document.getElementById('channelChart').getContext('2d');
+        new Chart(ctxChannel, {
+            type: 'bar',
+            data: {
+                labels: ['Eventos Privados', 'Canales Encriptados', 'Revistas de Lujo', 'Demostraciones Tácticas', 'Cine'],
+                datasets: [{
+                    label: 'Asignación de Presupuesto %',
+                    data: [30, 20, 20, 15, 15],
+                    backgroundColor: '#cbd5e1',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } },
+                    x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        // --- INTERACTION: TRAIT LIST GENERATOR ---
+
+        const characters = [
+            { name: "James Bond", trait: "Estilo Impecable & Licencia para Matar", pct: 95 },
+            { name: "Bruce Wayne", trait: "Recursos Ilimitados & Doble Vida", pct: 90 },
+            { name: "Ethan Hunt", trait: "Improvisación Táctica", pct: 85 },
+            { name: "Jason Bourne", trait: "Instinto de Supervivencia", pct: 88 },
+            { name: "Tony Stark", trait: "Genio Tecnológico", pct: 85 },
+            { name: "Napoleon Solo", trait: "Encanto & Sigilo", pct: 80 }
+        ];
+
+        const traitContainer = document.getElementById('trait-list');
+        characters.forEach(char => {
+            const div = document.createElement('div');
+            div.innerHTML = `
+                <div class="flex justify-between text-sm mb-1">
+                    <span class="text-slate-400">${char.name}</span>
+                    <span class="text-slate-200">${char.trait}</span>
+                </div>
+                <div class="w-full bg-slate-800 rounded-full h-1.5">
+                    <div class="bg-slate-500 h-1.5 rounded-full" style="width: ${char.pct}%"></div>
+                </div>
+            `;
+            traitContainer.appendChild(div);
+        });
+
+
+        // --- INTERACTION: DUALITY TOGGLE ENGINE ---
+
+        let isSpyMode = false;
+        const toggleBtn = document.getElementById('duality-toggle');
+        const toggleCircle = document.getElementById('toggle-circle');
+        const modeLabel = document.getElementById('mode-label');
+        const heroTitle1 = document.getElementById('hero-title-1');
+        const heroTitle2 = document.getElementById('hero-title-2');
+        const cardExec = document.getElementById('card-executive');
+        const cardRen = document.getElementById('card-renegade');
+
+        const copyData = {
+            social: {
+                exec: `<strong>Plataforma:</strong> LinkedIn / Exclusive Networks<br>
+                       <strong>Visual:</strong> Copa de Martini, Iluminación tenue, el coche en la entrada del casino.<br>
+                       <strong>Leyenda:</strong> "La suerte es para los que no están preparados. El 212 Navigator es pura ingeniería." #Sofisticación #Agente212`,
+                spy: `<strong>Plataforma:</strong> Signal / Telegram (Canales)<br>
+                           <strong>Visual:</strong> Visión nocturna, coordenadas GPS, el coche atravesando una zona de exclusión.<br>
+                           <strong>Leyenda:</strong> "Objetivo adquirido. Extracción en T-menos 5 minutos." #ModoEspía #MisiónCumplida`
+            },
+            print: {
+                exec: `<strong>Colocación:</strong> Vanity Fair / GQ<br>
+                       <strong>Titular:</strong> "Para los ojos del mundo."<br>
+                       <strong>Cuerpo:</strong> Un traje bien cortado abre puertas. Un coche bien construido las derriba (metafóricamente).`,
+                spy: `<strong>Colocación:</strong> Wired / Tactical Weekly<br>
+                           <strong>Titular:</strong> "Indetectable."<br>
+                           <strong>Cuerpo:</strong> Pintura absorbente de radar. Neumáticos silenciosos. Desaparece antes de que sepan que estuviste allí.`
+            },
+            email: {
+                exec: `<strong>Asunto:</strong> Su invitación al Círculo Interior.<br>
+                       <strong>Tono:</strong> Diplomático, Elegante, Secreto.<br>
+                       <strong>Llamada a la Acción:</strong> "Confirme Asistencia"`,
+                spy: `<strong>Asunto:</strong> ALERTA ROJA: ACTIVACIÓN REQUERIDA<br>
+                       <strong>Tono:</strong> Telegráfico, Urgente, Codificado.<br>
+                       <strong>Llamada a la Acción:</strong> "Iniciar Protocolo"`
+            },
+            video: {
+                exec: `<strong>Escena:</strong> Plano secuencia entrando a una gala benéfica. Flashes de cámaras. El coche se detiene suavemente.<br>
+                       <strong>Voz en Off:</strong> "Todos miran. Pocos ven."`,
+                spy: `<strong>Escena:</strong> Corte rápido. Persecución en callejón estrecho. Derrape controlado. Luces apagadas para evasión.<br>
+                       <strong>Voz en Off:</strong> "Lo único que verán son las luces traseras."`
+            }
+        };
+
+        // Current Active Tab
+        let currentTab = 'social';
+
+        const tabNames = {
+            social: 'Inteligencia (Social)',
+            print: 'Dossier (Print)',
+            email: 'Comunicado (Email)',
+            video: 'Vigilancia (Video)'
+        };
+
+        function updateCopy() {
+            const contentDiv = document.getElementById('copy-content');
+            const data = copyData[currentTab];
+            const activeData = isSpyMode ? data.spy : data.exec;
+            const themeClass = isSpyMode ? 'border-emerald-500' : 'border-slate-400';
+
+            contentDiv.innerHTML = `
+                <div class="animate-fade-in border-l-4 ${themeClass} pl-6">
+                    <h4 class="text-2xl text-white font-bold mb-4 capitalize serif-font">Estrategia ${tabNames[currentTab]}: ${isSpyMode ? 'Operativo Espía' : 'Agente Sofisticado'}</h4>
+                    <div class="text-lg text-slate-300 leading-relaxed font-light">
+                        ${activeData}
+                    </div>
+                </div>
+            `;
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            // Update UI tabs
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('tab-active', 'text-white', 'border-slate-400', 'border-emerald-500');
+                btn.classList.add('tab-inactive', 'text-slate-500');
+            });
+            event.target.classList.remove('tab-inactive', 'text-slate-500');
+            event.target.classList.add('tab-active', 'text-white');
+
+            // Add border color based on mode
+            if (isSpyMode) {
+                event.target.classList.add('border-emerald-500'); // We need to handle this dynamically if we want the bottom border to change color
+            } else {
+                event.target.classList.add('border-slate-400');
+            }
+
+            updateCopy();
+        }
+
+        // Toggle Logic
+        toggleBtn.addEventListener('click', () => {
+            isSpyMode = !isSpyMode;
+
+            // Animate Switch
+            if (isSpyMode) {
+                toggleCircle.classList.add('translate-x-6', 'bg-emerald-500');
+                toggleCircle.classList.remove('translate-x-1', 'bg-white');
+                modeLabel.innerText = "Modo Espía";
+                modeLabel.classList.add('text-emerald-500', 'font-bold');
+                modeLabel.classList.remove('text-slate-400');
+
+                // Hero Update
+                heroTitle1.classList.add('text-slate-600');
+                heroTitle1.classList.remove('text-white');
+                heroTitle2.classList.add('text-emerald-500');
+                heroTitle2.classList.remove('text-slate-500');
+
+                // Cards focus
+                cardRen.classList.remove('opacity-60');
+                cardExec.classList.add('opacity-60');
+
+            } else {
+                toggleCircle.classList.remove('translate-x-6', 'bg-emerald-500');
+                toggleCircle.classList.add('translate-x-1', 'bg-white');
+                modeLabel.innerText = "Modo Sofisticado";
+                modeLabel.classList.remove('text-emerald-500', 'font-bold');
+                modeLabel.classList.add('text-slate-400');
+
+                // Hero Update
+                heroTitle1.classList.add('text-white');
+                heroTitle1.classList.remove('text-slate-600');
+                heroTitle2.classList.add('text-slate-500');
+                heroTitle2.classList.remove('text-emerald-500');
+
+                // Cards focus
+                cardExec.classList.remove('opacity-60');
+                cardRen.classList.add('opacity-60');
+            }
+
+            // Update Tone Content
+            updateCopy();
+
+            // Update Chart Colors dynamically
+            archetypeChart.data.datasets[0].borderColor = isSpyMode ? colors.spyBorder : colors.silverBorder;
+            archetypeChart.data.datasets[0].backgroundColor = isSpyMode ? 'rgba(16, 185, 129, 0.2)' : 'rgba(203, 213, 225, 0.2)';
+            archetypeChart.update();
+        });
+
+        // Initialize
+        updateCopy();
+
+    </script>
+</body>
+
+</html>
